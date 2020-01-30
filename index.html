@@ -28,8 +28,16 @@
     canv.addEventListener('mousedown', function(){
         isMouseDown = true;
     });
+    canv.addEventListener('touchstart', function(){
+        isMouseDown = true;
+    });
 
     canv.addEventListener('mouseup', function(){
+        isMouseDown = false;
+        ctx.beginPath();
+        coords.push('mouseup');
+    });
+    canv.addEventListener('touchend', function(){
         isMouseDown = false;
         ctx.beginPath();
         coords.push('mouseup');
@@ -51,6 +59,21 @@
             ctx.moveTo(e.clientX, e.clientY);
         }
     });
+    canv.addEventListener('touchmove', function (e){
+        if( isMouseDown )
+        {
+            coords.push([e.clientX, e.clientY]);
+            ctx.lineTo(e.clientX, e.clientY);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(e.clientX, e.clientY, 10, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(e.clientX, e.clientY);
+        }
+    })ж
 
     function save (){
         localStorage.setItem('coords', JSON.stringify(coords));
